@@ -1,385 +1,404 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Generador de Claves TV</title>
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Segoe UI,Arial,sans-serif;
-}
-
-body{
-
-background:#141414;
-color:white;
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-height:100vh;
-
-}
-
-.container{
-
-width:900px;
-max-width:95%;
-
-background:#1f1f1f;
-
-padding:35px;
-
-border-radius:18px;
-
-box-shadow:0 0 40px rgba(229,9,20,.45);
-
-}
-
-h1{
-
-text-align:center;
-color:#e50914;
-
-margin-bottom:10px;
-
-}
-
-.sub{
-
-text-align:center;
-
-color:#bbb;
-
-margin-bottom:25px;
-
-}
-
-#clave{
-
-background:#101010;
-
-border:2px solid #e50914;
-
-border-radius:12px;
-
-padding:20px;
-
-text-align:center;
-
-font-size:34px;
-
-font-family:Consolas;
-
-letter-spacing:2px;
-
-color:#00ff8c;
-
-margin-bottom:25px;
-
-user-select:all;
-
-}
-
-.botones{
-
-display:grid;
-
-grid-template-columns:repeat(3,1fr);
-
-gap:15px;
-
-}
-
-button{
-
-padding:15px;
-
-border:none;
-
-border-radius:10px;
-
-background:#e50914;
-
-color:white;
-
-font-size:18px;
-
-cursor:pointer;
-
-font-weight:bold;
-
-transition:.25s;
-
-}
-
-button:hover{
-
-background:#ff2d39;
-
-transform:scale(1.03);
-
-}
-
-#estado{
-
-height:25px;
-
-margin-top:18px;
-
-text-align:center;
-
-font-weight:bold;
-
-color:#00ff88;
-
-}
-
-.historial{
-
-margin-top:30px;
-
-background:#101010;
-
-padding:18px;
-
-border-radius:12px;
-
-max-height:260px;
-
-overflow:auto;
-
-}
-
-.historial h2{
-
-color:#e50914;
-
-margin-bottom:10px;
-
-}
-
-.item{
-
-padding:8px;
-
-border-bottom:1px solid #333;
-
-font-family:Consolas;
-
-font-size:18px;
-
-}
-
-.item:hover{
-
-background:#222;
-
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador Streaming Premium</title>
+    <style>
+        :root {
+            /* Paleta de colores profesional y minimalista */
+            --bg-base: #09090b;
+            --bg-card: #121217;
+            --bg-input: #050505;
+            --border-color: #27272a;
+            --text-main: #fafafa;
+            --text-muted: #a1a1aa;
+            --accent-color: #3b82f6; 
+            --btn-primary-bg: #fafafa;
+            --btn-primary-text: #09090b;
+            --btn-secondary-bg: #18181b;
+            --btn-secondary-hover: #27272a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background-color: var(--bg-card);
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .sub {
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .plataformas {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 32px;
+        }
+
+        .badge {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+        }
+
+        #clave-container {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        #clave {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px 20px;
+            text-align: center;
+            font-size: 34px;
+            font-family: 'JetBrains Mono', 'Consolas', monospace;
+            letter-spacing: 2px;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+            user-select: all;
+            word-break: break-all;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        #clave:hover {
+            border-color: #3f3f46;
+        }
+
+        .requisitos {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px 16px;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .requisitos span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .requisitos span::before {
+            content: "•";
+            color: var(--accent-color);
+            font-size: 16px;
+        }
+
+        .botones {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .btn-full {
+            grid-column: span 2;
+        }
+
+        button {
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-generar {
+            background-color: var(--btn-primary-bg);
+            color: var(--btn-primary-text);
+        }
+
+        .btn-generar:hover {
+            background-color: #e4e4e7;
+            transform: translateY(-1px);
+        }
+
+        .btn-secundario {
+            background-color: var(--btn-secondary-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secundario:hover {
+            background-color: var(--btn-secondary-hover);
+        }
+
+        .historial {
+            border-top: 1px solid var(--border-color);
+            padding-top: 24px;
+        }
+
+        .historial h2 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .lista-contenedor {
+            max-height: 160px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .lista-contenedor::-webkit-scrollbar { width: 4px; }
+        .lista-contenedor::-webkit-scrollbar-track { background: transparent; }
+        .lista-contenedor::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
+
+        .item {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            font-family: 'JetBrains Mono', 'Consolas', monospace;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .item:hover {
+            background-color: var(--btn-secondary-bg);
+            color: var(--text-main);
+        }
+
+        .item svg {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .item:hover svg {
+            opacity: 1;
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: var(--text-main);
+            color: var(--bg-base);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+        }
+
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="container">
-
-<h1>🎬 Generador de Claves</h1>
-
-<div class="sub">
-
-Contraseñas fáciles para Smart TV
-
-</div>
-
-<div id="clave">
-
-Generando...
-
-</div>
-
-<div class="botones">
-
-<button onclick="generar()">
-🎲 Generar
-</button>
-
-<button id="btnCopiar" onclick="copiar()">
-📋 Copiar
-</button>
-
-<button onclick="limpiar()">
-🗑 Limpiar
-</button>
-
-</div>
-
-<div id="estado"></div>
-
-<div class="historial">
-
-<h2>Historial</h2>
-
-<div id="lista"></div>
-
-</div>
-
-</div>
-
-<script>
-
-const palabras=[
-
-"marcacion",
-
-"automovil",
-
-"clothes",
-
-"defectuoso",
-
-"superados",
-
-"bressed",
-
-"bones",
-
-"yasuo"
-
-];
-
-const clave=document.getElementById("clave");
-const lista=document.getElementById("lista");
-const estado=document.getElementById("estado");
-const boton=document.getElementById("btnCopiar");
-
-function rnd(min,max){
-
-return Math.floor(Math.random()*(max-min+1))+min;
-
-}
-
-function generar(){
-
-let base=palabras[rnd(0,palabras.length-1)];
-
-let claveFinal=base;
-
-while(claveFinal.length<10){
-
-let n=rnd(0,9);
-
-if(claveFinal.slice(-4)!=(n.toString().repeat(4))){
-
-claveFinal+=n;
-
-}
-
-}
-
-let extra=rnd(0,4);
-
-for(let i=0;i<extra;i++){
-
-let n=rnd(0,9);
-
-claveFinal+=n;
-
-}
-
-clave.textContent=claveFinal;
-
-let div=document.createElement("div");
-
-div.className="item";
-
-div.textContent=claveFinal;
-
-lista.prepend(div);
-
-estado.textContent="";
-
-}
-
-function copiar(){
-
-let texto=clave.textContent;
-
-if(!texto){
-
-return;
-
-}
-
-if(navigator.clipboard){
-
-navigator.clipboard.writeText(texto).catch(copiaManual);
-
-}else{
-
-copiaManual();
-
-}
-
-boton.textContent="✅ Copiado";
-
-boton.style.background="#00a651";
-
-estado.textContent="Clave copiada al portapapeles.";
-
-setTimeout(()=>{
-
-boton.textContent="📋 Copiar";
-
-boton.style.background="#e50914";
-
-estado.textContent="";
-
-},1800);
-
-}
-
-function copiaManual(){
-
-let area=document.createElement("textarea");
-
-area.value=clave.textContent;
-
-document.body.appendChild(area);
-
-area.select();
-
-document.execCommand("copy");
-
-document.body.removeChild(area);
-
-}
-
-function limpiar(){
-
-lista.innerHTML="";
-
-estado.textContent="Historial eliminado.";
-
-setTimeout(()=>{
-
-estado.textContent="";
-
-},1500);
-
-}
-
-generar();
-
-</script>
-
+    <div class="container">
+        <div class="header">
+            <h1>Generador de Accesos</h1>
+            <div class="sub">Claves optimizadas para Smart TV</div>
+        </div>
+
+        <div class="plataformas">
+            <span class="badge">NETFLIX</span>
+            <span class="badge">DISNEY+</span>
+            <span class="badge">MAX</span>
+            <span class="badge">PRIME</span>
+        </div>
+
+        <div id="clave-container">
+            <div id="clave">Generando...</div>
+        </div>
+
+        <div class="requisitos">
+            <span>Mínimo 10 caracteres</span>
+            <span>Todo en minúscula</span>
+            <span>Máximo 4 repetidos</span>
+        </div>
+
+        <div class="botones">
+            <button class="btn-generar btn-full" onclick="generar()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/></svg>
+                Generar Nueva Clave
+            </button>
+            <button class="btn-secundario" id="btnCopiar" onclick="copiar(document.getElementById('clave').textContent)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                Copiar
+            </button>
+            <button class="btn-secundario" onclick="limpiar()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                Limpiar
+            </button>
+        </div>
+
+        <div class="historial">
+            <h2>Historial Reciente</h2>
+            <div class="lista-contenedor" id="lista"></div>
+        </div>
+    </div>
+
+    <div id="toast">Copiado al portapapeles</div>
+
+    <script>
+        const palabras = [
+            "gato", "luna", "cielo", "mar", "azul", "nube", "flor", "casa", "tren",
+            "lobo", "rana", "pato", "hoja", "rojo", "gris", "cafe", "taza", "piano",
+            "mesa", "fuego", "agua", "aire", "roca", "caja", "cine", "moto", "bici",
+            "leon", "tigre", "pino", "lago", "nieve", "cable", "raton", "tecla",
+            "noche", "tarde", "reloj", "libro", "lapiz", "papel", "zorro", "cisne"
+        ];
+
+        const claveEl = document.getElementById("clave");
+        const listaEl = document.getElementById("lista");
+        const toastEl = document.getElementById("toast");
+
+        function rnd(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function generar() {
+            // 1. Palabra base en minúsculas
+            let claveFinal = palabras[rnd(0, palabras.length - 1)];
+
+            // 2. Rellenar con números hasta llegar a 10 caracteres mínimo.
+            // Si la palabra es muy corta y faltan números, garantizamos llegar a 10.
+            // Si ya pasara de 10 (ej: si añadieras palabras largas), no haría nada, 
+            // pero forzamos al menos 2 números al final para mantener el patrón palabra+números.
+            let minNumeros = Math.max(2, 10 - claveFinal.length);
+            
+            let i = 0;
+            while (i < minNumeros || claveFinal.length < 10) {
+                let n = rnd(0, 9).toString();
+                
+                // 3. Condición anti-spam: "no debe contener más de 4 caracteres repetidos seguidos"
+                // Verificamos si los últimos 4 caracteres de la clave coinciden con el número que intentamos poner 4 veces.
+                // Si coinciden, significa que al añadirlo tendríamos 5 iguales. Por lo tanto, no lo añadimos y generamos otro.
+                if (claveFinal.length >= 4 && claveFinal.slice(-4) === n.repeat(4)) {
+                    continue; // Salta este ciclo sin incrementar 'i' y busca otro número
+                }
+
+                claveFinal += n;
+                i++;
+            }
+
+            // Transición suave del texto en la UI
+            claveEl.style.opacity = 0;
+            setTimeout(() => {
+                claveEl.textContent = claveFinal;
+                claveEl.style.opacity = 1;
+                agregarAlHistorial(claveFinal);
+            }, 150);
+        }
+
+        function agregarAlHistorial(texto) {
+            let div = document.createElement("div");
+            div.className = "item";
+            div.innerHTML = `
+                <span>${texto}</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            `;
+            div.onclick = () => copiar(texto);
+            listaEl.prepend(div);
+        }
+
+        function copiar(texto) {
+            if (!texto || texto === "Generando...") return;
+
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(texto).then(() => mostrarToast())
+                .catch(() => copiaManual(texto));
+            } else {
+                copiaManual(texto);
+            }
+        }
+
+        function copiaManual(texto) {
+            let area = document.createElement("textarea");
+            area.value = texto;
+            document.body.appendChild(area);
+            area.select();
+            document.execCommand("copy");
+            document.body.removeChild(area);
+            mostrarToast();
+        }
+
+        let toastTimer;
+        function mostrarToast(mensaje = "Copiado al portapapeles") {
+            toastEl.textContent = mensaje;
+            toastEl.classList.add("show");
+            
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toastEl.classList.remove("show");
+            }, 2000);
+        }
+
+        function limpiar() {
+            listaEl.innerHTML = "";
+            mostrarToast("Historial eliminado");
+        }
+
+        // Ejecutar al iniciar
+        generar();
+    </script>
 </body>
 </html>
