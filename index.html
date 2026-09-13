@@ -6,7 +6,6 @@
     <title>Generador Streaming Premium</title>
     <style>
         :root {
-            /* Paleta de colores profesional y minimalista */
             --bg-base: #09090b;
             --bg-card: #121217;
             --bg-input: #050505;
@@ -77,7 +76,7 @@
         .badge {
             font-size: 10px;
             font-weight: 600;
-            padding: 4px 10px;
+            padding: 6px 12px;
             border-radius: 6px;
             letter-spacing: 0.5px;
             background: rgba(255, 255, 255, 0.05);
@@ -94,13 +93,13 @@
             background-color: var(--bg-input);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 24px 20px;
+            padding: 22px 18px;
             text-align: center;
-            font-size: 34px;
+            font-size: 30px;
             font-family: 'JetBrains Mono', 'Consolas', monospace;
             letter-spacing: 2px;
             color: var(--text-main);
-            transition: all 0.2s ease;
+            transition: opacity 0.2s ease, border-color 0.2s ease;
             user-select: all;
             word-break: break-all;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
@@ -206,7 +205,7 @@
             border-radius: 8px;
             margin-bottom: 4px;
             font-family: 'JetBrains Mono', 'Consolas', monospace;
-            font-size: 16px;
+            font-size: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -255,7 +254,7 @@
     <div class="container">
         <div class="header">
             <h1>Generador de Accesos</h1>
-            <div class="sub">Claves optimizadas para Smart TV</div>
+            <div class="sub">Claves fáciles para clientes (sin símbolos raros)</div>
         </div>
 
         <div class="plataformas">
@@ -270,9 +269,10 @@
         </div>
 
         <div class="requisitos">
+            <span>Solo minúsculas</span>
+            <span>Sin símbolos</span>
+            <span>Números fáciles</span>
             <span>Mínimo 10 caracteres</span>
-            <span>Todo en minúscula</span>
-            <span>Máximo 4 repetidos</span>
         </div>
 
         <div class="botones">
@@ -299,13 +299,27 @@
     <div id="toast">Copiado al portapapeles</div>
 
     <script>
+        // Palabras sencillas en español que cualquiera conoce
         const palabras = [
             "gato", "luna", "cielo", "mar", "azul", "nube", "flor", "casa", "tren",
             "lobo", "rana", "pato", "hoja", "rojo", "gris", "cafe", "taza", "piano",
             "mesa", "fuego", "agua", "aire", "roca", "caja", "cine", "moto", "bici",
             "leon", "tigre", "pino", "lago", "nieve", "cable", "raton", "tecla",
-            "noche", "tarde", "reloj", "libro", "lapiz", "papel", "zorro", "cisne"
+            "noche", "tarde", "reloj", "libro", "lapiz", "papel", "zorro", "cisne",
+            "sol", "rio", "oro", "pan", "luz", "paz", "ola", "red", "sal", "uva",
+            "viento", "playa", "selva", "valle", "isla", "costa", "monte", "arena",
+            "barco", "auto", "copa", "vaso", "plato", "puerta", "muro", "techo",
+            "verde", "rosa", "negro", "blanco", "dorado", "plata", "claro",
+            "puma", "oso", "loro", "ciervo", "foca", "topo", "toro", "vaca",
+            "nuez", "trigo", "maiz", "fruta", "miel", "pera", "limon", "mango",
+            "disco", "radio", "foco", "rueda", "timon", "motor", "mapa",
+            "campo", "pista", "calle", "puente", "torre", "aldea", "puerto",
+            "cuerda", "botas", "gorro", "silla", "banco", "cama", "bolso",
+            "tambor", "canto", "ritmo", "baile", "verso", "senda", "marca"
         ];
+
+        // Números amigables (sin el 0 ni el 1 para no confundir con 'o', 'l' o 'I')
+        const digitosFaciles = ["2", "3", "4", "5", "6", "7", "8", "9"];
 
         const claveEl = document.getElementById("clave");
         const listaEl = document.getElementById("lista");
@@ -316,37 +330,34 @@
         }
 
         function generar() {
-            // 1. Palabra base en minúsculas
-            let claveFinal = palabras[rnd(0, palabras.length - 1)];
+            // Elige una palabra base
+            let palabra = palabras[rnd(0, palabras.length - 1)];
 
-            // 2. Rellenar con números hasta llegar a 10 caracteres mínimo.
-            // Si la palabra es muy corta y faltan números, garantizamos llegar a 10.
-            // Si ya pasara de 10 (ej: si añadieras palabras largas), no haría nada, 
-            // pero forzamos al menos 2 números al final para mantener el patrón palabra+números.
-            let minNumeros = Math.max(2, 10 - claveFinal.length);
+            // Estructura: palabra en minúscula + números fáciles al final
+            // Asegura longitud de 10 a 11 caracteres (perfecto para pasar el filtro de cualquier app)
+            let claveFinal = palabra;
             
-            let i = 0;
-            while (i < minNumeros || claveFinal.length < 10) {
-                let n = rnd(0, 9).toString();
-                
-                // 3. Condición anti-spam: "no debe contener más de 4 caracteres repetidos seguidos"
-                // Verificamos si los últimos 4 caracteres de la clave coinciden con el número que intentamos poner 4 veces.
-                // Si coinciden, significa que al añadirlo tendríamos 5 iguales. Por lo tanto, no lo añadimos y generamos otro.
-                if (claveFinal.length >= 4 && claveFinal.slice(-4) === n.repeat(4)) {
-                    continue; // Salta este ciclo sin incrementar 'i' y busca otro número
+            // Garantizar al menos 4 números para que quede fuerte pero fácil
+            let objetivoLargo = Math.max(10, palabra.length + 4);
+
+            while (claveFinal.length < objetivoLargo) {
+                let n = digitosFaciles[rnd(0, digitosFaciles.length - 1)];
+
+                // Regla anti-bloqueo: no permite el mismo número 3 veces seguidas
+                if (claveFinal.endsWith(n + n)) {
+                    continue;
                 }
 
                 claveFinal += n;
-                i++;
             }
 
-            // Transición suave del texto en la UI
+            // Animación suave de cambio
             claveEl.style.opacity = 0;
             setTimeout(() => {
                 claveEl.textContent = claveFinal;
                 claveEl.style.opacity = 1;
                 agregarAlHistorial(claveFinal);
-            }, 150);
+            }, 120);
         }
 
         function agregarAlHistorial(texto) {
@@ -397,7 +408,7 @@
             mostrarToast("Historial eliminado");
         }
 
-        // Ejecutar al iniciar
+        // Generar al cargar
         generar();
     </script>
 </body>
